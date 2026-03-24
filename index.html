@@ -249,7 +249,7 @@
 <script>
   // --- CONFIGURATION ---
   // PASTE YOUR GOOGLE GEMINI API KEY HERE
-  const API_KEY = "YOUR_GEMINI_API_KEY_HERE"; 
+  const API_KEY = "AIzaSyAsqQ5skFPrjM5r4BZOwtyBH0lqbQoTaGc"; 
 
   const SYSTEM_PROMPT = `You are Vora, an expert MuleSoft AI assistant. 
   You provide deep technical help with:
@@ -331,7 +331,7 @@
     const text = inputBox.value.trim();
     if (!text || isLoading) return;
 
-    if (API_KEY === "AIzaSyAsqQ5skFPrjM5r4BZOwtyBH0lqbQoTaGc") {
+    if (API_KEY === "YOUR_GEMINI_API_KEY_HERE") {
         addMessage('bot', 'Error: Please paste your Gemini API Key into the code (Line 345)!');
         return;
     }
