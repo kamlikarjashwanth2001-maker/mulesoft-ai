@@ -28,446 +28,292 @@
     color: var(--text-primary);
     height: 100vh;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    padding: 16px;
-  }
-
-  .chat-wrapper {
-    width: 100%;
-    max-width: 720px;
-    height: 90vh;
-    max-height: 820px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
+    align-items: center;
     overflow: hidden;
   }
 
-  /* Header */
-  .header {
-    padding: 20px 24px;
+  .chat-container {
+    width: 100%;
+    max-width: 440px;
+    height: 90vh;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .chat-header {
+    padding: 24px 28px;
     border-bottom: 1px solid var(--border);
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 14px;
-    background: var(--surface);
+    background: #fff;
+    z-index: 10;
   }
 
-  .logo {
-    width: 40px;
-    height: 40px;
-    background: var(--accent);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .logo svg { width: 20px; height: 20px; fill: white; }
-
-  .header-text h1 {
-    font-size: 15px;
+  .header-left h1 {
+    font-size: 1.25rem;
     font-weight: 600;
-    letter-spacing: -0.2px;
-  }
-
-  .header-text p {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 1px;
-  }
-
-  .status {
-    margin-left: auto;
+    letter-spacing: -0.02em;
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: var(--text-muted);
+    gap: 8px;
+  }
+
+  .header-left p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
   }
 
   .status-dot {
-    width: 7px; height: 7px;
-    background: #22c55e;
+    width: 8px;
+    height: 8px;
+    background: #10b981;
     border-radius: 50%;
-    animation: pulse 2s infinite;
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+  #chat-history {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    scroll-behavior: smooth;
   }
 
-  /* Suggestion chips */
+  .message {
+    max-width: 85%;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    position: relative;
+  }
+
+  .message.user {
+    align-self: flex-end;
+    background: var(--user-bubble);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 18px 18px 2px 18px;
+  }
+
+  .message.bot {
+    align-self: flex-start;
+    background: var(--bot-bubble);
+    color: var(--text-primary);
+    padding: 12px 18px;
+    border-radius: 18px 18px 18px 2px;
+    border: 1px solid var(--border);
+  }
+
+  pre {
+    background: #2d2d2d;
+    color: #f8f8f2;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    overflow-x: auto;
+  }
+
+  .chat-footer {
+    padding: 20px 24px 28px;
+    background: #fff;
+    border-top: 1px solid var(--border);
+  }
+
   .suggestions {
-    padding: 16px 24px 0;
     display: flex;
     gap: 8px;
-    flex-wrap: wrap;
+    margin-bottom: 16px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
   }
 
   .chip {
     background: var(--accent-soft);
     color: var(--accent);
-    border: 1px solid #c7d9ff;
-    border-radius: 100px;
-    padding: 6px 14px;
-    font-size: 12px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.15s ease;
     white-space: nowrap;
+    transition: all 0.2s;
+    border: 1px solid transparent;
   }
 
   .chip:hover {
-    background: var(--accent);
-    color: white;
-    border-color: var(--accent);
+    background: #d0e1ff;
   }
 
-  /* Messages */
-  .messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    scroll-behavior: smooth;
-  }
-
-  .messages::-webkit-scrollbar { width: 4px; }
-  .messages::-webkit-scrollbar-track { background: transparent; }
-  .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
-  .msg {
-    display: flex;
-    gap: 10px;
-    animation: fadeUp 0.25s ease forwards;
-    opacity: 0;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .msg.user { flex-direction: row-reverse; }
-
-  .avatar {
-    width: 32px; height: 32px;
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px;
-    font-weight: 600;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  .avatar.bot {
-    background: var(--accent);
-    color: white;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-  }
-
-  .avatar.user {
-    background: var(--text-primary);
-    color: white;
-    font-size: 12px;
-  }
-
-  .bubble {
-    max-width: 75%;
-    padding: 12px 16px;
-    border-radius: 16px;
-    font-size: 14px;
-    line-height: 1.6;
-    position: relative;
-  }
-
-  .msg.bot .bubble {
-    background: var(--bot-bubble);
-    border: 1px solid var(--border);
-    border-radius: 4px 16px 16px 16px;
-    color: var(--text-primary);
-  }
-
-  .msg.user .bubble {
-    background: var(--user-bubble);
-    color: white;
-    border-radius: 16px 4px 16px 16px;
-  }
-
-  .bubble code {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    background: rgba(0,101,255,0.08);
-    padding: 2px 6px;
-    border-radius: 4px;
-    color: var(--accent);
-  }
-
-  .msg.user .bubble code {
-    background: rgba(255,255,255,0.2);
-    color: white;
-  }
-
-  .bubble pre {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    background: #f4f4f2;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px;
-    margin-top: 10px;
-    overflow-x: auto;
-    line-height: 1.7;
-    color: #333;
-  }
-
-  .timestamp {
-    font-size: 10px;
-    color: var(--text-muted);
-    margin-top: 4px;
-    padding: 0 4px;
-  }
-
-  .msg.user .timestamp { text-align: right; }
-
-  /* Typing indicator */
-  .typing {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 14px 16px;
-  }
-
-  .typing span {
-    width: 6px; height: 6px;
-    background: var(--text-muted);
-    border-radius: 50%;
-    animation: bounce 1.2s infinite;
-  }
-
-  .typing span:nth-child(2) { animation-delay: 0.2s; }
-  .typing span:nth-child(3) { animation-delay: 0.4s; }
-
-  @keyframes bounce {
-    0%, 60%, 100% { transform: translateY(0); }
-    30% { transform: translateY(-5px); }
-  }
-
-  /* Input area */
   .input-area {
-    padding: 16px 24px 20px;
-    border-top: 1px solid var(--border);
     display: flex;
-    gap: 10px;
     align-items: flex-end;
-    background: var(--surface);
-  }
-
-  .input-box {
-    flex: 1;
+    gap: 12px;
     background: var(--bg);
+    padding: 8px 12px;
+    border-radius: 16px;
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 12px 16px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--text-primary);
-    resize: none;
-    outline: none;
-    max-height: 120px;
-    line-height: 1.5;
-    transition: border-color 0.15s;
+    transition: border-color 0.2s;
   }
 
-  .input-box::placeholder { color: var(--text-muted); }
-  .input-box:focus { border-color: var(--accent); }
+  .input-area:focus-within {
+    border-color: var(--accent);
+    background: #fff;
+  }
 
-  .send-btn {
-    width: 42px; height: 42px;
-    background: var(--accent);
+  textarea {
+    flex: 1;
+    background: transparent;
     border: none;
+    outline: none;
+    resize: none;
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 8px 4px;
+    max-height: 120px;
+    color: var(--text-primary);
+  }
+
+  #send-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    width: 36px;
+    height: 36px;
     border-radius: 12px;
     cursor: pointer;
     display: flex;
-    align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.15s;
+    align-items: center;
+    transition: opacity 0.2s;
+    margin-bottom: 2px;
   }
 
-  .send-btn:hover { background: #0052cc; transform: scale(1.04); }
-  .send-btn:active { transform: scale(0.97); }
-  .send-btn:disabled { background: var(--border); cursor: not-allowed; transform: none; }
-  .send-btn svg { width: 18px; height: 18px; fill: white; }
+  #send-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 
-  .footer-note {
-    text-align: center;
-    font-size: 11px;
+  .typing {
+    font-style: italic;
+    font-size: 0.8rem;
     color: var(--text-muted);
-    margin-top: 8px;
+    margin-bottom: 8px;
   }
+
 </style>
 </head>
 <body>
 
-<div class="chat-wrapper">
-  <!-- Header -->
-  <div class="header">
-    <div class="logo">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-    </div>
-    <div class="header-text">
-      <h1>MuleSoft AI Helper</h1>
-      <p>Powered by Claude · Anypoint Platform Expert</p>
-    </div>
-    <div class="status">
-      <div class="status-dot"></div>
-      Online
+<div class="chat-container">
+  <div class="chat-header">
+    <div class="header-left">
+      <h1>VORA <span class="status-dot"></span></h1>
+      <p>MuleSoft AI Helper</p>
     </div>
   </div>
 
-  <!-- Suggestion chips -->
-  <div class="suggestions" id="suggestions">
-    <div class="chip" onclick="sendChip(this)">What is MuleSoft?</div>
-    <div class="chip" onclick="sendChip(this)">How does Anypoint Platform work?</div>
-    <div class="chip" onclick="sendChip(this)">Explain DataWeave</div>
-    <div class="chip" onclick="sendChip(this)">What is an API gateway?</div>
-  </div>
-
-  <!-- Messages -->
-  <div class="messages" id="messages">
-    <div class="msg bot">
-      <div class="avatar bot">M</div>
-      <div>
-        <div class="bubble">
-          👋 Hey! I'm your <strong>MuleSoft AI Helper</strong>.<br/><br/>
-          Ask me anything about MuleSoft, Anypoint Platform, DataWeave, API design, integrations, connectors — I've got you covered!
-        </div>
-        <div class="timestamp">Just now</div>
-      </div>
+  <div id="chat-history">
+    <div class="message bot">
+      Hi! I'm Vora, your MuleSoft specialist. How can I help you with Anypoint Platform or DataWeave today?
     </div>
   </div>
 
-  <!-- Input -->
-  <div class="input-area">
-    <textarea class="input-box" id="inputBox" placeholder="Ask about MuleSoft, DataWeave, APIs..." rows="1"
-      onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-    </button>
+  <div class="chat-footer">
+    <div class="suggestions" id="suggestions">
+      <div class="chip" onclick="sendChip(this)">What is MuleSoft?</div>
+      <div class="chip" onclick="sendChip(this)">DataWeave help</div>
+      <div class="chip" onclick="sendChip(this)">API Design</div>
+    </div>
+    
+    <div class="input-area">
+      <textarea id="user-input" placeholder="Ask anything about MuleSoft..." rows="1"></textarea>
+      <button id="send-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+      </button>
+    </div>
   </div>
-  <div class="footer-note">AI can make mistakes · Always verify with official MuleSoft docs</div>
 </div>
 
 <script>
-  const SYSTEM_PROMPT = `You are a friendly and expert MuleSoft AI assistant. You specialize in:
-- MuleSoft Anypoint Platform
-- DataWeave 2.0 transformations
-- API design and REST/SOAP integrations
-- Mule 4 flows, sub-flows, error handling
-- Connectors (HTTP, Database, Salesforce, etc.)
-- API Manager, Runtime Manager, Exchange
-- CloudHub deployment
-- MuleSoft best practices and architecture patterns
+  // --- CONFIGURATION ---
+  // PASTE YOUR GOOGLE GEMINI API KEY HERE
+  const API_KEY = "YOUR_GEMINI_API_KEY_HERE"; 
 
-Keep responses clear, concise and beginner-friendly. Use code blocks for DataWeave or XML examples.
-When showing code, format it properly. Be encouraging and helpful.`;
+  const SYSTEM_PROMPT = `You are Vora, an expert MuleSoft AI assistant. 
+  You provide deep technical help with:
+  1. Mule 4 and Anypoint Platform.
+  2. DataWeave 2.0 (always provide code snippets).
+  3. API-Led Connectivity and RAML design.
+  4. Error handling and CloudHub deployment.
+  Keep responses professional, concise, and technical.`;
 
-  let isLoading = false;
-  const messagesEl = document.getElementById('messages');
-  const inputBox = document.getElementById('inputBox');
-  const sendBtn = document.getElementById('sendBtn');
+  const chatHistoryEl = document.getElementById('chat-history');
+  const inputBox = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
   const suggestionsEl = document.getElementById('suggestions');
+
   let conversationHistory = [];
+  let isLoading = false;
 
-  function autoResize(el) {
-    el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-  }
+  inputBox.addEventListener('input', () => {
+    inputBox.style.height = 'auto';
+    inputBox.style.height = inputBox.scrollHeight + 'px';
+  });
 
-  function handleKey(e) {
+  inputBox.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
-  }
+  });
 
-  function getTime() {
-    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  }
-
-  function formatText(text) {
-    // code blocks
-    text = text.replace(/```(\w+)?\n?([\s\S]*?)```/g, (_, lang, code) =>
-      `<pre>${escapeHtml(code.trim())}</pre>`);
-    // inline code
-    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
-    // bold
-    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    // newlines
-    text = text.replace(/\n/g, '<br/>');
-    return text;
-  }
-
-  function escapeHtml(text) {
-    return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
+  sendBtn.addEventListener('click', sendMessage);
 
   function addMessage(role, text) {
     const msg = document.createElement('div');
-    msg.className = `msg ${role}`;
-
-    const avatar = document.createElement('div');
-    avatar.className = `avatar ${role}`;
-    avatar.textContent = role === 'bot' ? 'M' : 'U';
-
-    const wrapper = document.createElement('div');
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    bubble.innerHTML = formatText(text);
-
-    const time = document.createElement('div');
-    time.className = 'timestamp';
-    time.textContent = getTime();
-
-    wrapper.appendChild(bubble);
-    wrapper.appendChild(time);
-    msg.appendChild(avatar);
-    msg.appendChild(wrapper);
-    messagesEl.appendChild(msg);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
+    msg.className = `message ${role}`;
+    
+    // Simple markdown-ish formatting for code blocks
+    if (text.includes('```')) {
+      const parts = text.split('```');
+      for (let i = 0; i < parts.length; i++) {
+        if (i % 2 === 1) {
+          const pre = document.createElement('pre');
+          pre.textContent = parts[i].replace(/^[a-z]+\n/, '');
+          msg.appendChild(pre);
+        } else {
+          const span = document.createElement('span');
+          span.textContent = parts[i];
+          msg.appendChild(span);
+        }
+      }
+    } else {
+      msg.textContent = text;
+    }
+    
+    chatHistoryEl.appendChild(msg);
+    chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
   }
 
   function showTyping() {
-    const msg = document.createElement('div');
-    msg.className = 'msg bot';
-    msg.id = 'typing-msg';
-
-    const avatar = document.createElement('div');
-    avatar.className = 'avatar bot';
-    avatar.textContent = 'M';
-
-    const wrapper = document.createElement('div');
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    bubble.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
-
-    wrapper.appendChild(bubble);
-    msg.appendChild(avatar);
-    msg.appendChild(wrapper);
-    messagesEl.appendChild(msg);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
+    const typing = document.createElement('div');
+    typing.id = 'typing-msg';
+    typing.className = 'typing';
+    typing.textContent = 'Vora is thinking...';
+    chatHistoryEl.appendChild(typing);
+    chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
   }
 
   function removeTyping() {
@@ -485,6 +331,11 @@ When showing code, format it properly. Be encouraging and helpful.`;
     const text = inputBox.value.trim();
     if (!text || isLoading) return;
 
+    if (API_KEY === "AIzaSyAsqQ5skFPrjM5r4BZOwtyBH0lqbQoTaGc") {
+        addMessage('bot', 'Error: Please paste your Gemini API Key into the code (Line 345)!');
+        return;
+    }
+
     suggestionsEl.style.display = 'none';
     isLoading = true;
     sendBtn.disabled = true;
@@ -492,38 +343,42 @@ When showing code, format it properly. Be encouraging and helpful.`;
     inputBox.style.height = 'auto';
 
     addMessage('user', text);
-    conversationHistory.push({ role: 'user', content: text });
+    
+    // Format for Gemini API
+    conversationHistory.push({ role: 'user', parts: [{ text: text }] });
 
     showTyping();
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: SYSTEM_PROMPT,
-          messages: conversationHistory
+          contents: conversationHistory,
+          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] }
         })
       });
 
       const data = await response.json();
-      const reply = data.content?.[0]?.text || 'Sorry, I could not get a response. Please try again.';
+      
+      if (data.error) throw new Error(data.error.message);
+
+      const reply = data.candidates[0].content.parts[0].text;
 
       removeTyping();
       addMessage('bot', reply);
-      conversationHistory.push({ role: 'assistant', content: reply });
+      conversationHistory.push({ role: 'model', parts: [{ text: reply }] });
 
     } catch (err) {
+      console.error(err);
       removeTyping();
-      addMessage('bot', 'Oops! Something went wrong. Please check your connection and try again.');
+      addMessage('bot', 'Error: ' + err.message + '. Make sure your API key is correct and CORS is allowed.');
+    } finally {
+      isLoading = false;
+      sendBtn.disabled = false;
     }
-
-    isLoading = false;
-    sendBtn.disabled = false;
-    inputBox.focus();
   }
 </script>
+
 </body>
 </html>
